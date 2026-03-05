@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lance Baker · Human Centered Alchemy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --amber:     #C8863A;
+      --ochre:     #B5712A;
+      --gold-pale: #E8C87A;
+      --warm-cream:#FAF4E8;
+      --parchment: #F2E8D0;
+      --bark:      #6B4C2A;
+      --earth:     #3D2B1A;
+      --sage:      #8A9B72;
+      --fog:       #D6CCBB;
+      --text-main: #2E1F0E;
+      --text-soft: #7A6148;
+    }
+
+    html { scroll-behavior: smooth; font-size: 90%; }
+
+    body {
+      background-color: var(--warm-cream);
+      color: var(--text-main);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: 1.125rem;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Noise texture overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    /* ── Typography ── */
+    h1, h2, h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      line-height: 1.2;
+    }
+
+    .label {
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.4rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(250,244,232,0.95) 70%, transparent);
+    }
+
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--earth);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      text-decoration: none;
+      transition: color 0.25s;
+    }
+
+    .nav-links a:hover { color: var(--amber); }
+
+    /* ── Sections ── */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .container-wide {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ── Hero ── */
+    #hero {
+      display: flex;
+      align-items: center;
+      padding-top: 4rem;
+      padding-bottom: 0;
+      overflow: hidden;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--amber);
+    }
+
+    .hero-headline {
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 300;
+      color: var(--earth);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--amber);
+    }
+
+    .hero-sub {
+      font-size: 1.2rem;
+      color: var(--text-soft);
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      border: 1px solid var(--amber);
+      color: var(--amber);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.8s forwards;
+    }
+
+    .hero-cta:hover {
+      background: var(--amber);
+      color: var(--warm-cream);
+    }
+
+    .hero-visual {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      pointer-events: none;
+      opacity: 0.95;
+      margin-left: -50px;
+    }
+
+    .sun-glyph {
+      width: clamp(280px, 30vw, 360px);
+      height: clamp(280px, 30vw, 360px);
+    }
+
+
+    /* ── Profile photo ── */
+    .profile-photo {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(200,134,58,0.3);
+      margin: 1rem 0 1.2rem;
+      display: block;
+    }
+    /* ── About ── */
+    #about {
+      padding: 0 0 5.5rem;
+      background: linear-gradient(to bottom, var(--warm-cream), var(--parchment));
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-aside {
+      position: sticky;
+      top: 8rem;
+    }
+
+    .about-aside h2 {
+      font-size: 3rem;
+      color: var(--earth);
+      margin-top: 0.5rem;
+    }
+
+    .about-body p {
+      color: var(--text-soft);
+      margin-bottom: 1.4rem;
+      font-size: 1.02rem;
+    }
+
+    .about-body p:first-child {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.45rem;
+      font-weight: 300;
+      color: var(--earth);
+      line-height: 1.5;
+    }
+
+    /* ── HCA Philosophy ── */
+    #philosophy {
+      padding: 5.5rem 0;
+      background: var(--parchment);
+    }
+
+    .philosophy-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .philosophy-header h2 {
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      color: var(--earth);
+      margin: 0.6rem 0 1.2rem;
+    }
+
+    .philosophy-header p {
+      color: var(--text-soft);
+      max-width: 560px;
+      margin: 0 auto;
+      font-size: 1.125rem;
+    }
+
+    .concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 5rem;
+    }
+
+    .concept-card {
+      background: rgba(250, 244, 232, 0.6);
+      border: 1px solid rgba(184, 148, 88, 0.2);
+      padding: 2.5rem 2rem;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .concept-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(107, 76, 42, 0.1);
+    }
+
+    .concept-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      font-weight: 300;
+      color: var(--gold-pale);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .concept-card h3 {
+      font-size: 1.7rem;
+      color: var(--earth);
+      margin-bottom: 0.8rem;
+    }
+
+    .concept-card p {
+      font-size: 1rem;
+      color: var(--text-soft);
+      line-height: 1.6;
+    }
+
+    .journey-block {
+      background: var(--earth);
+      color: var(--parchment);
+      padding: 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .journey-block h3 {
+      font-size: 2.2rem;
+      color: var(--gold-pale);
+      margin-bottom: 1rem;
+    }
+
+    .journey-block p {
+      color: rgba(242, 232, 208, 0.88);
+      font-size: 1.125rem;
+    }
+
+    .journey-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .step {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+
+    .step-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--amber);
+      line-height: 1;
+      min-width: 2rem;
+    }
+
+    .step-text strong {
+      display: block;
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-pale);
+      margin-bottom: 0.2rem;
+    }
+
+    .step-text p {
+      font-size: 1.125rem;
+      color: rgba(242, 232, 208, 0.65);
+    }
+
+    /* ── Dissonance Audit ── */
+    #audit {
+      padding: 5.5rem 0;
+      background: linear-gradient(135deg, var(--parchment) 0%, var(--warm-cream) 100%);
+    }
+
+    .audit-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .audit-text h2 {
+      font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+      color: var(--earth);
+      margin: 0.5rem 0 1.4rem;
+    }
+
+    .audit-text p {
+      color: var(--text-soft);
+      margin-bottom: 1.2rem;
+      font-size: 1.125rem;
+    }
+
+    .audit-cta {
+      display: inline-block;
+      margin-top: 0.8rem;
+      padding: 0.95rem 2.4rem;
+      background: var(--amber);
+      color: var(--warm-cream);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    .audit-cta:hover { background: var(--ochre); }
+
+    .audit-card {
+      background: var(--earth);
+      padding: 3.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .audit-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      border: 1px solid rgba(200,134,58,0.2);
+    }
+
+    .audit-card::after {
+      content: '';
+      position: absolute;
+      top: -10px; right: -10px;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      border: 1px solid rgba(200,134,58,0.15);
+    }
+
+    .audit-card .label { margin-bottom: 1rem; }
+
+    .audit-card h3 {
+      font-size: 1.8rem;
+      color: var(--gold-pale);
+      margin-bottom: 1.2rem;
+    }
+
+    .audit-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .audit-features li {
+      display: flex;
+      gap: 0.8rem;
+      font-size: 1.125rem;
+      color: rgba(242, 232, 208, 0.75);
+      align-items: flex-start;
+    }
+
+    .audit-features li::before {
+      content: '—';
+      color: var(--amber);
+      flex-shrink: 0;
+    }
+
+    /* ── Mosaic Voices Song Circle ── */
+    #song-circle {
+      padding: 5.5rem 0;
+      background: var(--earth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    #song-circle::before, #song-circle::after { display: none; }
+
+    .song-circle-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .song-circle-bg svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 900px;
+      height: 900px;
+      opacity: 0.07;
+    }
+
+    .circle-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .circle-header h2 {
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      color: var(--gold-pale);
+      margin: 0.5rem 0 1.2rem;
+    }
+
+    .circle-header p {
+      color: rgba(242, 232, 208, 0.7);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .circle-quote {
+      border-left: 2px solid var(--amber);
+      padding: 1.5rem 2rem;
+      margin: 3rem 0;
+      background: rgba(200,134,58,0.06);
+    }
+
+    .circle-quote p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--parchment);
+      line-height: 1.6;
+    }
+
+    .circle-body {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .circle-info {
+      max-width: 780px;
+      width: 100%;
+    }
+
+    .circle-info h3 {
+      font-size: 1.5rem;
+      color: var(--gold-pale);
+      margin-bottom: 0.8rem;
+    }
+
+    .circle-info p {
+      color: rgba(242, 232, 208, 0.65);
+      font-size: 1.125rem;
+      margin-bottom: 1rem;
+    }
+
+    .circle-cta {
+      display: inline-block;
+      margin-top: 0.8rem;
+      padding: 0.9rem 2rem;
+      border: 1px solid rgba(200,134,58,0.6);
+      color: var(--amber);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .circle-cta:hover {
+      background: var(--amber);
+      color: var(--earth);
+    }
+
+    .circle-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .pillar {
+      padding: 1.4rem 1.6rem;
+      border: 1px solid rgba(200,134,58,0.15);
+      background: rgba(200,134,58,0.04);
+    }
+
+    .pillar strong {
+      display: block;
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.4rem;
+    }
+
+    .pillar p {
+      font-size: 1.125rem;
+      color: rgba(242, 232, 208, 0.6);
+    }
+
+    /* ── Newsletter ── */
+    #newsletter {
+      padding: 5.5rem 0;
+      background: var(--parchment);
+      border-top: 1px solid rgba(184,148,88,0.2);
+    }
+
+    .newsletter-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .newsletter-text h2 {
+      font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+      color: var(--earth);
+      margin: 0.5rem 0 1.2rem;
+    }
+
+    .newsletter-text p {
+      color: #5C4530;
+      font-size: 1.125rem;
+      line-height: 1.6;
+    }
+
+    .newsletter-sub {
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      color: var(--text-soft);
+      margin-bottom: 1rem;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 0;
+    }
+
+    .email-input {
+      flex: 1;
+      padding: 0.9rem 1.2rem;
+      border: 1px solid rgba(184,148,88,0.4);
+      border-right: none;
+      background: var(--warm-cream);
+      color: var(--earth);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.25s;
+    }
+
+    .email-input::placeholder { color: var(--fog); }
+    .email-input:focus { border-color: var(--amber); }
+
+    .newsletter-cta {
+      display: inline-block;
+      padding: 0.9rem 1.6rem;
+      background: var(--amber);
+      color: var(--warm-cream);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.3s;
+    }
+
+    .newsletter-cta:hover { background: var(--ochre); }
+
+    /* ── Divider ── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--fog), transparent);
+      margin: 0;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--earth);
+      border-top: 1px solid rgba(200,134,58,0.15);
+      padding: 3rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      color: rgba(242, 232, 208, 0.6);
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 1.8rem;
+    }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(242, 232, 208, 0.45);
+      text-decoration: none;
+      transition: color 0.25s;
+    }
+
+    .footer-links a:hover { color: var(--amber); }
+
+    .x-link {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: rgba(242, 232, 208, 0.3);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes slowSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.6; }
+      50%       { opacity: 1; }
+    }
+
+    .spin-slow { animation: slowSpin 60s linear infinite; }
+    .spin-slow-rev { animation: slowSpin 90s linear infinite reverse; }
+
+    /* ── Scroll reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── Accessibility: minimum contrast & readable sizes ── */
+    /* Ensure soft text meets WCAG AA on light backgrounds */
+    .hero-sub        { color: #6B5135; }   /* was --text-soft, now darker */
+    .about-body p    { color: #5C4530; font-size: 1.125rem; }
+    .concept-card p  { color: #5C4530; }
+    .audit-text p    { color: #5C4530; }
+    /* On dark backgrounds keep lighter text but ensure it's bright enough */
+    .journey-block p         { color: rgba(242,232,208,0.88); }
+    .audit-features li       { color: rgba(242,232,208,0.88); }
+    .circle-header p         { color: rgba(242,232,208,0.88); }
+    .circle-info p           { color: rgba(242,232,208,0.82); }
+    .pillar p                { color: rgba(242,232,208,0.82); }
+    .step-text p             { color: rgba(242,232,208,0.80); }
+    .footer-links a          { color: rgba(242,232,208,0.65); }
+    .footer-copy             { color: rgba(242,232,208,0.50); }
+
+    /* ── Mobile ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+
+      /* Hero: graphic becomes faded background behind text */
+      .hero-inner {
+        grid-template-columns: 1fr;
+        position: relative;
+        align-items: center;
+      }
+      .hero-visual {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none;
+        opacity: 0.95;
+        margin: 0;
+      }
+      .sun-glyph {
+        width: 88vw;
+        height: 88vw;
+        max-width: 360px;
+        max-height: 360px;
+      }
+      .sun-glyph {
+        width: 88vw;
+        height: 88vw;
+        max-width: 360px;
+        max-height: 360px;
+      }
+      .hero-text {
+        position: relative;
+        z-index: 2;
+        padding: 2rem 0;
+      }
+
+      /* Tighter section padding on mobile */
+      #about        { padding: 0 0 3rem; }
+      #philosophy   { padding: 4rem 0; }
+      #audit        { padding: 4rem 0; }
+      #song-circle  { padding: 4rem 0; }
+
+      .philosophy-header { margin-bottom: 2.5rem; }
+      .concepts-grid { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2.5rem; }
+      .journey-block { grid-template-columns: 1fr; padding: 2rem 1.6rem; gap: 2rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+      .about-aside { position: static; text-align: left; }
+      .profile-photo { margin: 0 0 1rem 0; }
+      .audit-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .circle-body { grid-template-columns: 1fr; gap: 2rem; margin-top: 2.5rem; }
+      .circle-header { margin-bottom: 2rem; }
+
+      /* Readable font sizes on mobile */
+      .label           { font-size: 0.72rem; }
+      .nav-brand       { font-size: 1rem; }
+      body             { font-size: 1.125rem; }
+      .about-body p:first-child { font-size: 1.2rem; }
+      .concept-card p  { font-size: 1.125rem; }
+      .audit-text p    { font-size: 1.125rem; }
+      .circle-info p   { font-size: 1.125rem; }
+      .pillar p        { font-size: 1.125rem; }
+      .audit-features li { font-size: 1.125rem; }
+      .hero-sub        { font-size: 1.15rem; }
+
+      /* Comfortable tap targets */
+      .hero-cta, .audit-cta, .circle-cta {
+        padding: 1rem 2rem;
+        display: block;
+        text-align: center;
+      }
+
+      #newsletter { padding: 4rem 0; }
+      .newsletter-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .form-row { flex-direction: column; }
+      .email-input { border-right: 1px solid rgba(184,148,88,0.4); border-bottom: none; }
+      .newsletter-cta { text-align: center; padding: 1rem; }
+
+      footer { flex-direction: column; gap: 1.2rem; text-align: center; }
+    }
+
+    /* ── Song Circle Modal ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(61, 43, 26, 0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      backdrop-filter: blur(4px);
+    }
+    .modal-box {
+      background: var(--parchment);
+      max-width: 560px;
+      width: 100%;
+      padding: 3rem;
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem; right: 1.2rem;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: var(--text-soft);
+      cursor: pointer;
+      line-height: 1;
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+    }
+    .modal-close:hover { color: var(--amber); }
+    .modal-label {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--earth);
+      margin-bottom: 0.6rem;
+      line-height: 1.2;
+    }
+    .modal-sub {
+      font-size: 0.95rem;
+      color: var(--text-soft);
+      margin-bottom: 1.8rem;
+      line-height: 1.6;
+    }
+    /* Kit form overrides inside modal */
+    .modal-box .formkit-form {
+      background: transparent !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+    .modal-box .formkit-column {
+      background: transparent !important;
+      padding: 0 !important;
+      border: none !important;
+    }
+    .modal-box [data-style="full"] { display: block !important; }
+    .modal-box .formkit-header,
+    .modal-box .formkit-subheader { display: none !important; }
+    .modal-box .formkit-input {
+      color: rgb(46, 31, 14) !important;
+      border-color: rgba(184,148,88,0.4) !important;
+      border-radius: 0 !important;
+      font-family: 'Jost', sans-serif !important;
+      font-weight: 300 !important;
+      background: #FAF4E8 !important;
+      font-size: 1rem !important;
+      padding: 14px 16px !important;
+      width: 100% !important;
+    }
+    .modal-box .formkit-submit {
+      background-color: rgb(200, 134, 58) !important;
+      border-radius: 0 !important;
+      font-family: 'Jost', sans-serif !important;
+      font-weight: 400 !important;
+      letter-spacing: 0.18em !important;
+      text-transform: uppercase !important;
+      font-size: 0.85rem !important;
+      width: 100% !important;
+    }
+    .modal-box .formkit-submit > span { padding: 16px 24px !important; }
+    .modal-box .formkit-submit { min-height: 52px !important; font-size: 0.85rem !important; }
+    .modal-box .formkit-guarantee {
+      color: var(--text-soft) !important;
+      font-family: 'Jost', sans-serif !important;
+      font-size: 0.78rem !important;
+    }
+    .modal-box .formkit-field { margin-bottom: 10px !important; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#hero" class="nav-brand">Lance Baker</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#philosophy">Philosophy</a></li>
+      <li><a href="#song-circle">Song Circle</a></li>
+      <li><a href="#newsletter">Newsletter</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-eyebrow">
+          <span class="label" style="font-size: 0.85rem; font-weight: 500; color: var(--amber);">Human Centered Alchemy</span>
+        </div>
+        <h1 class="hero-headline">
+          Turning friction<br>into <em>fuel.</em>
+        </h1>
+        <p class="hero-sub">
+          Guiding people from the chaos of modern life toward profound connection — by transforming everyday experience into something sacred.
+        </p>
+
+      </div>
+      <div class="hero-visual">
+        <svg class="sun-glyph" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Outer ring slow spin -->
+          <g class="spin-slow" style="transform-origin:200px 200px">
+            <circle cx="200" cy="200" r="175" stroke="#C8863A" stroke-width="0.5" stroke-dasharray="4 12"/>
+          </g>
+          <!-- Mid ring reverse spin -->
+          <g class="spin-slow-rev" style="transform-origin:200px 200px">
+            <circle cx="200" cy="200" r="140" stroke="#C8863A" stroke-width="0.4" stroke-dasharray="2 18" opacity="0.5"/>
+            <!-- 8 radial marks -->
+            <line x1="200" y1="60"  x2="200" y2="75"  stroke="#C8863A" stroke-width="0.8" opacity="0.6"/>
+            <line x1="200" y1="325" x2="200" y2="340" stroke="#C8863A" stroke-width="0.8" opacity="0.6"/>
+            <line x1="60"  y1="200" x2="75"  y2="200" stroke="#C8863A" stroke-width="0.8" opacity="0.6"/>
+            <line x1="325" y1="200" x2="340" y2="200" stroke="#C8863A" stroke-width="0.8" opacity="0.6"/>
+            <line x1="101" y1="101" x2="112" y2="112" stroke="#C8863A" stroke-width="0.8" opacity="0.4"/>
+            <line x1="288" y1="288" x2="299" y2="299" stroke="#C8863A" stroke-width="0.8" opacity="0.4"/>
+            <line x1="288" y1="112" x2="299" y2="101" stroke="#C8863A" stroke-width="0.8" opacity="0.4"/>
+            <line x1="101" y1="299" x2="112" y2="288" stroke="#C8863A" stroke-width="0.8" opacity="0.4"/>
+          </g>
+          <!-- Inner circle -->
+          <circle cx="200" cy="200" r="90" stroke="#C8863A" stroke-width="0.6" opacity="0.4"/>
+          <circle cx="200" cy="200" r="60" stroke="#E8C87A" stroke-width="0.5" opacity="0.3"/>
+          <!-- Center sun glyph -->
+          <circle cx="200" cy="200" r="22" fill="#C8863A" opacity="0.15"/>
+          <circle cx="200" cy="200" r="22" stroke="#C8863A" stroke-width="1" opacity="0.8"/>
+          <!-- Radiating lines from center -->
+          <g opacity="0.35" stroke="#C8863A" stroke-width="0.6">
+            <line x1="200" y1="178" x2="200" y2="115"/>
+            <line x1="200" y1="222" x2="200" y2="285"/>
+            <line x1="178" y1="200" x2="115" y2="200"/>
+            <line x1="222" y1="200" x2="285" y2="200"/>
+            <line x1="184" y1="184" x2="141" y2="141"/>
+            <line x1="216" y1="216" x2="259" y2="259"/>
+            <line x1="216" y1="184" x2="259" y2="141"/>
+            <line x1="184" y1="216" x2="141" y2="259"/>
+          </g>
+          <!-- Inner dot -->
+          <circle cx="200" cy="200" r="4" fill="#C8863A" opacity="0.9"/>
+          <!-- Decorative arcs -->
+          <path d="M 200 110 A 90 90 0 0 1 290 200" stroke="#E8C87A" stroke-width="0.5" opacity="0.3" fill="none"/>
+          <path d="M 200 290 A 90 90 0 0 1 110 200" stroke="#E8C87A" stroke-width="0.5" opacity="0.3" fill="none"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container-wide">
+      <div class="about-grid">
+        <div class="about-aside reveal">
+          <span class="label">About</span>
+          <img src="data:image/jpeg;base64,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" alt="Lance Baker" class="profile-photo" />
+          <h2>Lance Baker</h2>
+        </div>
+        <div class="about-body reveal">
+          <p style="font-weight: 500; font-size: 1.35rem; line-height: 1.4;">I'm a guide, creative generalist, and lifelong experimenter in what it means to live a connected, intentional life — especially in the middle of all the noise.</p>
+          <p>I come to this work through the intersection of many things: music, psychology, fatherhood, a deep curiosity about human behavior, and a persistent question about why some people move through hardship with grace while others remain stuck in patterns they can't quite name. I'm the latter — or I was, for a long time. This work is how I found my way through.</p>
+          <p>My own inner map is shaped by frameworks I've found genuinely useful — Enneagram (5w4), MBTI (INFP), Human Design (3/5 Profile) — not as labels, but as lenses. I share them here in case they resonate, or in case they send you down a rabbit hole worth exploring.</p>
+          <p>I'm not a therapist or a coach in the traditional sense. I'm someone who synthesizes ideas, sits with hard questions, and creates spaces — literal and metaphorical — where transformation can happen.</p>
+          <p>Human Centered Alchemy is the name I've given to that synthesis. It's a philosophy, a practice, and an ongoing invitation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PHILOSOPHY -->
+  <section id="philosophy">
+    <div class="container-wide">
+      <div class="philosophy-header reveal">
+        <span class="label">The Philosophy</span>
+        <h2>Human Centered Alchemy</h2>
+        <p>A framework for transmuting the friction of modern life into connection, clarity, and meaning — not by escaping your circumstances, but by learning to see them differently.</p>
+      </div>
+
+      <div class="concepts-grid">
+        <div class="concept-card reveal">
+          <div class="concept-num">01</div>
+          <h3>Dissonance</h3>
+          <p>The gap between your inner world and your outer life. It shows up as hollow victories, autopilot days, and the persistent feeling that you're performing a role instead of living a life. Dissonance isn't the problem — it's the messenger pointing toward where alignment is missing.</p>
+        </div>
+        <div class="concept-card reveal">
+          <div class="concept-num">02</div>
+          <h3>Harmonance</h3>
+          <p>The state of profound connection where your inner and outer worlds are aligned. Not constant bliss — but the ability to be fully present with what is, including difficulty. A sense of "Yes, this." Creative aliveness. Feeling like the author of your own experience.</p>
+        </div>
+        <div class="concept-card reveal">
+          <div class="concept-num">03</div>
+          <h3>Transmutation</h3>
+          <p>The alchemical process of turning the raw material of daily life — the friction, the dissonance — into fuel for connection and clarity. Not fixing your life. Cultivating a way of seeing that allows you to redeem any moment as meaningful.</p>
+        </div>
+      </div>
+
+      <div class="journey-block reveal">
+        <div>
+          <h3>The Journey</h3>
+          <p>HCA offers a path — not a prescription. Each phase invites you into a deeper relationship with your own experience, on your own terms.</p>
+        </div>
+        <div class="journey-steps">
+          <div class="step">
+            <span class="step-label">I</span>
+            <div class="step-text">
+              <strong>Recognition</strong>
+              <p>Noticing the dissonance. Naming what's been unnamed.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-label">II</span>
+            <div class="step-text">
+              <strong>Excavation</strong>
+              <p>Asking what the friction is protecting or pointing toward.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-label">III</span>
+            <div class="step-text">
+              <strong>Transmutation</strong>
+              <p>Using the raw material of your experience as fuel for clarity.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-label">IV</span>
+            <div class="step-text">
+              <strong>Integration</strong>
+              <p>Living with more alignment between who you are and how you move through the world.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <div class="divider"></div>
+
+  <!-- SONG CIRCLE -->
+  <section id="song-circle">
+    <div class="song-circle-bg">
+      <svg viewBox="0 0 900 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Sound wave arcs - top -->
+        <g stroke="#FAF4E8" fill="none">
+          <path d="M 450 450 m -420 0 a 420 420 0 0 1 840 0" stroke-width="2"/>
+          <path d="M 450 450 m -360 0 a 360 360 0 0 1 720 0" stroke-width="1.5" stroke-dasharray="8 8"/>
+          <path d="M 450 450 m -300 0 a 300 300 0 0 1 600 0" stroke-width="2"/>
+          <path d="M 450 450 m -240 0 a 240 240 0 0 1 480 0" stroke-width="1.5" stroke-dasharray="6 6"/>
+          <path d="M 450 450 m -180 0 a 180 180 0 0 1 360 0" stroke-width="2"/>
+          <path d="M 450 450 m -120 0 a 120 120 0 0 1 240 0" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <path d="M 450 450 m -60  0 a 60  60  0 0 1 120 0" stroke-width="2"/>
+
+          <!-- Sound wave arcs - bottom (mirror) -->
+          <path d="M 450 450 m -420 0 a 420 420 0 0 0 840 0" stroke-width="2"/>
+          <path d="M 450 450 m -360 0 a 360 360 0 0 0 720 0" stroke-width="1.5" stroke-dasharray="8 8"/>
+          <path d="M 450 450 m -300 0 a 300 300 0 0 0 600 0" stroke-width="2"/>
+          <path d="M 450 450 m -240 0 a 240 240 0 0 0 480 0" stroke-width="1.5" stroke-dasharray="6 6"/>
+          <path d="M 450 450 m -180 0 a 180 180 0 0 0 360 0" stroke-width="2"/>
+          <path d="M 450 450 m -120 0 a 120 120 0 0 0 240 0" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <path d="M 450 450 m -60  0 a 60  60  0 0 0 120 0" stroke-width="2"/>
+
+          <!-- Horizontal axis line -->
+          <line x1="30" y1="450" x2="870" y2="450" stroke-width="1.5"/>
+
+          <!-- Vertical ripple marks at key ring intersections -->
+          <line x1="450" y1="28"  x2="450" y2="58"  stroke-width="2"/>
+          <line x1="450" y1="872" x2="450" y2="842" stroke-width="2"/>
+          <line x1="450" y1="88"  x2="450" y2="108" stroke-width="1.5"/>
+          <line x1="450" y1="812" x2="450" y2="792" stroke-width="1.5"/>
+          <line x1="450" y1="148" x2="450" y2="162" stroke-width="1.5"/>
+          <line x1="450" y1="752" x2="450" y2="738" stroke-width="1.5"/>
+
+          <!-- Small dots at wave peaks on horizontal axis -->
+          <circle cx="30"  cy="450" r="4" fill="#FAF4E8"/>
+          <circle cx="90"  cy="450" r="3" fill="#FAF4E8"/>
+          <circle cx="150" cy="450" r="3" fill="#FAF4E8"/>
+          <circle cx="210" cy="450" r="3" fill="#FAF4E8"/>
+          <circle cx="270" cy="450" r="3" fill="#FAF4E8"/>
+          <circle cx="330" cy="450" r="3" fill="#FAF4E8"/>
+          <circle cx="390" cy="450" r="3" fill="#FAF4E8"/>
+          <circle cx="510" cy="450" r="3" fill="#FAF4E8"/>
+          <circle cx="570" cy="450" r="3" fill="#FAF4E8"/>
+          <circle cx="630" cy="450" r="3" fill="#FAF4E8"/>
+          <circle cx="690" cy="450" r="3" fill="#FAF4E8"/>
+          <circle cx="750" cy="450" r="3" fill="#FAF4E8"/>
+          <circle cx="810" cy="450" r="3" fill="#FAF4E8"/>
+          <circle cx="870" cy="450" r="4" fill="#FAF4E8"/>
+        </g>
+
+        <!-- Center resonance point -->
+        <circle cx="450" cy="450" r="8" fill="#FAF4E8"/>
+        <circle cx="450" cy="450" r="16" stroke="#FAF4E8" stroke-width="1.5" fill="none"/>
+      </svg>
+    </div>
+    <div class="container-wide" style="position:relative;z-index:1;">
+      <div class="circle-header reveal">
+        <span class="label">Monthly Gathering · Southfield, MI · Metro Detroit</span>
+        <h2>Mosaic Voices Song Circle</h2>
+        <p>A space for shared sound, co-regulation, and the kind of connection that doesn't require you to have it all figured out.</p>
+      </div>
+
+      <div class="circle-body reveal">
+        <div class="circle-info">
+          <span class="label" style="color: var(--amber);">What it is</span>
+          <p>The Mosaic Voices Song Circle is a monthly gathering where music becomes a vehicle for co-regulation, presence, and genuine human connection. Through shared song, we engage body and voice. Melodies carry emotion. Words connect us to what we're actually feeling.</p>
+          <p>Our nervous systems calm in the presence of attuned others. Shared rhythm and collective sound are among the most ancient tools we have for that calming — and that's exactly what we tap into here.</p>
+          <p>No musical experience required. No performance. Just your voice, exactly as it is — held in a circle of compassionate witnesses. This is transmutation in practice: turning the raw material of daily life into fuel for something deeper.</p>
+          <a href="#" class="circle-cta" onclick="document.getElementById('circle-modal').style.display='flex'; return false;">Get notified of the next circle</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section id="newsletter">
+    <div class="container-wide">
+      <div class="newsletter-inner reveal">
+        <div class="newsletter-text">
+          <span class="label">Stay Connected</span>
+          <h2>Circle of Resonance</h2>
+          <p>A periodic newsletter surfacing tools, resources, and thoughtful insights around alchemy, transmutation, and the art of living with more presence. No noise — just signal, when there's something worth sharing.</p>
+        </div>
+        <div class="newsletter-form">
+          <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
+          <form action="https://app.kit.com/forms/9165576/subscriptions" class="seva-form formkit-form" method="post" data-sv-form="9165576" data-uid="61525dde65" data-format="inline" data-version="5" min-width="400 500 600 700 800" style="background-color: rgb(242, 232, 208); border-radius: 0; box-shadow: none;"><div data-style="full"><div data-element="column" class="formkit-column" style="background-color: rgb(242, 232, 208);"><div class="formkit-background" style="opacity: 0;"></div><div class="formkit-header" data-element="header" style="display:none;"><h2>Circle of Resonance</h2></div><div class="formkit-subheader" data-element="subheader" style="display:none;"></div></div><div data-element="column" class="formkit-column"><ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul><div data-element="fields" class="seva-fields formkit-fields"><div class="formkit-field" style="margin-bottom: 10px; width: 100%;"><input class="formkit-input" name="email_address" aria-label="Email Address" placeholder="Email Address" required="" type="email" style="color: rgb(46, 31, 14); border-color: rgba(184,148,88,0.4); border-radius: 0; font-family: Jost, sans-serif; font-weight: 300; background: #FAF4E8; font-size: 1rem; padding: 14px 16px; width: 100%; display: block;" autocomplete="off"></div><button data-element="submit" class="formkit-submit formkit-submit" style="color: rgb(250, 244, 232); background-color: rgb(200, 134, 58); border-radius: 0; font-weight: 400; font-family: Jost, sans-serif; letter-spacing: 0.18em; text-transform: uppercase; font-size: 0.85rem; padding: 14px 28px; width: 100%;"><div class="formkit-spinner"><div></div><div></div><div></div></div><span>Subscribe</span></button></div><div class="formkit-guarantee" data-element="guarantee" style="color: rgb(122, 97, 72); font-size: 0.78rem; font-weight: 300; font-family: Jost, sans-serif;">We respect your privacy. Unsubscribe at any time.</div></div></div></form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">Lance Baker · Human Centered Alchemy</div>
+    <div class="footer-links">
+      <a href="https://x.com/" target="_blank" class="x-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="opacity:0.7">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+        X / Twitter
+      </a>
+    </div>
+    <div class="footer-copy">© 2026 Lance Baker</div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+  <!-- Song Circle Modal -->
+  <div id="circle-modal" class="modal-overlay" onclick="if(event.target===this)this.style.display='none'">
+    <div class="modal-box">
+      <button class="modal-close" onclick="document.getElementById('circle-modal').style.display='none'">×</button>
+      <span class="modal-label">Mosaic Voices Song Circle</span>
+      <h2 class="modal-title">Stay in the Loop</h2>
+      <p class="modal-sub">Sign up to receive news and updates on upcoming gatherings in Southfield, MI.</p>
+      <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
+      <form action="https://app.kit.com/forms/9165758/subscriptions" class="seva-form formkit-form" method="post" data-sv-form="9165758" data-uid="3f8fc27053" data-format="inline" data-version="5" min-width="400 500 600 700 800"><div data-style="full"><div data-element="column" class="formkit-column"><div class="formkit-background"></div><div class="formkit-header" data-element="header"><h2></h2></div><div class="formkit-subheader" data-element="subheader"></div></div><div data-element="column" class="formkit-column"><ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul><div data-element="fields" class="seva-fields formkit-fields"><div class="formkit-field"><input class="formkit-input" name="email_address" aria-label="Email Address" placeholder="Email Address" required="" type="email" autocomplete="off"></div><button data-element="submit" class="formkit-submit formkit-submit"><div class="formkit-spinner"><div></div><div></div><div></div></div><span>Subscribe</span></button></div><div class="formkit-guarantee" data-element="guarantee"><p>We respect your privacy. Unsubscribe at any time.</p></div></div></div></form>
+    </div>
+  </div>
+
+</body>
+</html>
